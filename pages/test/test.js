@@ -1,4 +1,5 @@
 // pages/test/test.js
+let shareOptions = { "from": "menu" }
 Page({
 
   /**
@@ -7,64 +8,33 @@ Page({
   data: {
 
   },
-  share() {
-    wx.showShareMenu({
-
-    })
-  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  share() {
+    var Config = new wx.BaaS.TableObject(21425);
+    Config.find().then(res => {
+      console.log(res)
+      getAccessToken()
+    }).catch(err => console.log(err))
+    function getAccessToken(APPID, APPSECRET) {
+      wx.BaaS.request({
+        url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}`
+      }).then(res => {
+        console.log(res)
+        return wx.BaaS.request({
+          url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${res.access_token}`,
+          data: {
+            scene: 'test',
+            url: 'pages/index/index'
+          }
+        })
+      }).then(res => {
+        console.log(res)
+      }).catch(err => console.log(err))
+    }
   }
 })
