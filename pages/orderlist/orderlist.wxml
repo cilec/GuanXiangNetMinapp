@@ -1,0 +1,10 @@
+<!--pages/orderlist/orderlist.wxml-->
+
+<scroll-view class="weui-cells weui-cells_after-title">
+  <block wx:for="{{record}}" wx:key="content_id">
+    <navigator url="/pages/details/details?id={{item.content_id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">{{item.title}}</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access">{{item.created_at}}</view>
+    </navigator>
+  </block>
+</scroll-view>

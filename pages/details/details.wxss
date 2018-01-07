@@ -1,0 +1,4 @@
+/* pages/details/details.wxss */
+page{
+  font-size: 14px;
+}

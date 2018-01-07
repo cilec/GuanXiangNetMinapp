@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "pages/test/test",
+    "pages/DayRecommended/DayRecommended",
+    "pages/orderlist/orderlist",
+    "pages/user/user",
+    "pages/details/details"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "观象网络",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#000",
+    "backgroundColor": "#fff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath":"pages/DayRecommended/DayRecommended",
+        "text": "当日推荐",
+        "iconPath": "lib/icon/article_normal.png",
+        "selectedIconPath": "lib/icon/article.png"
+      },
+      {
+        "pagePath": "pages/orderlist/orderlist",
+        "text": "购买记录",
+        "iconPath": "lib/icon/review_normal.png",
+        "selectedIconPath": "lib/icon/review.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "个人中心",
+        "iconPath": "lib/icon/user_normal.png",
+        "selectedIconPath": "lib/icon/user.png"
+      }
+    ]
+  }
+}
