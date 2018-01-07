@@ -15,10 +15,11 @@ Page({
 
   },
   share() {
+    let that = this;
     var Config = new wx.BaaS.TableObject(21425);
     Config.find().then(res => {
-      console.log(res)
-      getAccessToken()
+      console.log(res.data.objects[0])
+      getAccessToken(res.data.objects[0].appid, res.data.objects[0].appsecret)
     }).catch(err => console.log(err))
     function getAccessToken(APPID, APPSECRET) {
       wx.BaaS.request({
@@ -26,14 +27,17 @@ Page({
       }).then(res => {
         console.log(res)
         return wx.BaaS.request({
-          url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${res.access_token}`,
+          // url: `https://api.weixin.qq.com/wxa/getwxacode?access_token=${res.data.access_token}`,
+          url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${res.data.access_token}`,
+          method: 'POST',
           data: {
-            scene: 'test',
-            url: 'pages/index/index'
+            "scene": "test",
+            "auto_color": true
           }
         })
       }).then(res => {
         console.log(res)
+       that.setData({imgData:wx.arrayBufferToBase64(res.data)})
       }).catch(err => console.log(err))
     }
   }
