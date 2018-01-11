@@ -2,7 +2,7 @@ const AV = require('./utils/av-weapp-min');
 
 AV.init({
   appId: 'rEBIu4a9dIGMRAyPAgGt475n-gzGzoHsz',
-  appKey: 'GssmPQgqgAJwq8QAqzwERn2H', 
+  appKey: 'GssmPQgqgAJwq8QAqzwERn2H',
 });
 //app.js
 const { config } = require('config/config.js');
@@ -10,7 +10,6 @@ const { utils } = require('utils/index.js');
 App({
   onLaunch: function () {
     let that = this
-
     // 引入 BaaS SDK
     require('./utils/sdk-v1.1.1')
     const clientID = config.BAAS.CLIENT_ID
