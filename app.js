@@ -1,3 +1,9 @@
+const AV = require('./utils/av-weapp-min');
+
+AV.init({
+  appId: 'rEBIu4a9dIGMRAyPAgGt475n-gzGzoHsz',
+  appKey: 'GssmPQgqgAJwq8QAqzwERn2H', 
+});
 //app.js
 const { config } = require('config/config.js');
 const { utils } = require('utils/index.js');
