@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/test/test",
     "pages/DayRecommended/DayRecommended",
     "pages/orderlist/orderlist",
     "pages/user/user",

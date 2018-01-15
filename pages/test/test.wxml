@@ -1,5 +1,4 @@
 <!--pages/test/test.wxml-->
 <text>pages/test/test.wxml</text>
 <button bindtap='share'>share</button>
-<button bindtap='hideShare'>hide</button>
- <image src="data:image/gif;base64,{{imgData}}"/> 
+<image src="data:image/gif;base64,{{scanCodeBase64}}" />
