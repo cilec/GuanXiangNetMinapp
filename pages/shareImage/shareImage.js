@@ -1,4 +1,5 @@
 const AV = require('../../utils/av-weapp-min');
+let ctx;
 Page({
 
   /**
@@ -12,24 +13,48 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading({
+      title: '图片生成中',
+    })
     console.log(options)
+    ctx = wx.createCanvasContext('myCanvas');
     this.setData({
       richTextID: options.richTextID,
       title: options.title
     })
-    this.generateShareImage(options.title, options.richTextID)
+    this.generateShareImage(options.title, options.richTextID, ctx)
+  },
+  saveImage() {
+    wx.canvasToTempFilePath({
+      fileType:'jpg',
+      quality: 1,
+      canvasId: 'myCanvas',
+      success: function (res) {
+        console.log(res.tempFilePath)
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success() {
+            wx.showToast({
+              title: '保存成功',
+            })
+          }
+        })
+      }
+    })
   },
   generateShareImage(title, richTextID) {
     let paramsJson = { id: richTextID };
     let that = this;
     let { avatarUrl } = wx.BaaS.storage.get('userinfo')
-    let localAvatarUrl = downloadImageToLocal(avatarUrl)
+    // let localAvatarUrl = downloadImageToLocal(avatarUrl);
     console.log('avatarUrl', avatarUrl)
     AV.Cloud.run('getScanCode', paramsJson).then(res => {
       console.log(res);
-      let qrcodeUrl = downloadImageToLocal(res.url)
-      drawShareImage(title, '28元', qrcodeUrl, localAvatarUrl)
-    }).catch(err => console.log(err))
+      return Promise.all([downloadImageToLocal(avatarUrl), downloadImageToLocal(res.url)])
+    }).then(res => {
+      drawShareImage(title, '28元', res[1], res[0])
+      wx.hideLoading()
+    })
   }
 })
 function drawShareImage(title, price, qrCodeUrl, avatarUrl) {
@@ -66,13 +91,13 @@ function drawShareImage(title, price, qrCodeUrl, avatarUrl) {
 function downloadImageToLocal(Url) {
   return new Promise((resolve) => {
     //这里必须用getImageInfo把图片存到本地，因为canvas的drawimage不支持网络图片
-    wx.getImageInfo({
-      src: Url,
-      success({ path }) {
-        resolve(path)
+    wx.downloadFile({
+      url: Url,
+      success(res) {
+        if (res.statusCode === 200) {
+          resolve(res.tempFilePath)
+        }
       }
     })
-  }).then(res => {
-    return res
-  })
+  }).catch(err => console.error(new Error(err)))
 }

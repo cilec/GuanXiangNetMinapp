@@ -1,1 +1,2 @@
-<canvas style="width: 750rpx; height: 750rpx;" canvas-id="myCanvas"></canvas>
+<canvas style="width: 750rpx; height: 750rpx;background:white;" canvas-id="myCanvas" ></canvas>
+<button type='primary' plain bindtap='saveImage'>保存图像到手机相册</button>
