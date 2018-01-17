@@ -3,3 +3,4 @@
 <view class="wxParser">
   <template is="wxParser" data="{{wxParserData:richText.nodes}}"/>
 </view>
+<button wx:if=></button>
