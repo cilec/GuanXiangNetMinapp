@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    avatarUrl: ''
   },
 
   /**
@@ -22,18 +22,21 @@ Page({
   generateShareImage(title, richTextID) {
     let paramsJson = { id: richTextID };
     let that = this;
+    let { avatarUrl } = wx.BaaS.storage.get('userinfo')
+    let localAvatarUrl = downloadImageToLocal(avatarUrl)
+    console.log('avatarUrl', avatarUrl)
     AV.Cloud.run('getScanCode', paramsJson).then(res => {
       console.log(res);
-      let QRcodeUrl = res.url;
-      drawShareImage(title, '28元', QRcodeUrl)
+      let qrcodeUrl = downloadImageToLocal(res.url)
+      drawShareImage(title, '28元', qrcodeUrl, localAvatarUrl)
     }).catch(err => console.log(err))
   }
 })
-function drawShareImage(title, price, qrCodeUrl) {
+function drawShareImage(title, price, qrCodeUrl, avatarUrl) {
   const ctx = wx.createCanvasContext('myCanvas');
   let { windowWidth } = wx.getSystemInfoSync();
   let radio = windowWidth / 750;
-  let { avatarUrl } = wx.BaaS.storage.get('userinfo')
+
   //画头像
   ctx.drawImage(avatarUrl, windowWidth / 2 - 40, 10, 80, 80);
   //把头像画成圆形
@@ -57,4 +60,19 @@ function drawShareImage(title, price, qrCodeUrl) {
   //画二维码
   ctx.drawImage(qrCodeUrl, windowWidth / 2, 250 - 75, 150, 150)
   ctx.draw()
+}
+
+//临时下载图片到本地
+function downloadImageToLocal(Url) {
+  return new Promise((resolve) => {
+    //这里必须用getImageInfo把图片存到本地，因为canvas的drawimage不支持网络图片
+    wx.getImageInfo({
+      src: Url,
+      success({ path }) {
+        resolve(path)
+      }
+    })
+  }).then(res => {
+    return res
+  })
 }
