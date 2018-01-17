@@ -1,6 +1,6 @@
 <!--pages/details/details.wxml-->
-<import src="../../wxParser/index.wxml"/>
+<import src="../../wxParser/index.wxml" />
 <view class="wxParser">
-  <template is="wxParser" data="{{wxParserData:richText.nodes}}"/>
+  <template is="wxParser" data="{{wxParserData:richText.nodes}}" />
 </view>
-<button wx:if=></button>
+<button type='primary' bindtap="shareImage" plain wx:if="{{membership.level==2}}">生成分享图片</button>

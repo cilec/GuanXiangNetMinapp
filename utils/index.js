@@ -53,6 +53,10 @@ function getTodayNewArticleList({ category_id, currentPage }) {
         }
       }
       currentPage.setData({ articles: articleList })
+      wx.setStorage({
+        key: 'articles',
+        data: articleList,
+      })
     }).catch(err => console.log(err))
 }
 

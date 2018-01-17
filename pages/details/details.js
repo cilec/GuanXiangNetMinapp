@@ -3,9 +3,9 @@ const wxParser = require('../../wxParser/index');
 const { config } = require('../../config/config.js')
 const { details_utils } = require('details_utils.js');
 Page({
-  data: {},
+  data: { membership: {} },
   onLoad: function (objects) {
-    // console.log(objects)
+    console.log('details', objects)
     wx.authorize({
       scope: 'scope.userInfo',
       success({ errMsg }) {
@@ -27,12 +27,18 @@ Page({
     })
     let richTextID = objects.id;
     let self = this
+
+
     //获取用户类别判断是否包时长用户
     let uid = parseInt(app.getUserID())
     let query = new wx.BaaS.Query()
     let MemberProfile = new wx.BaaS.TableObject(config.BAAS.MEMBERPROFILE_TABLE_ID);
     query.compare('created_by', '=', uid);
     MemberProfile.setQuery(query).find().then(res => {
+      self.setData({
+        membership: res.data.objects[0],
+        richTextID
+      })
       if (res.data.objects[0].level == 0) {    //判断是否包月用户
         let ArticlePurchaseRecord = new wx.BaaS.TableObject(config.BAAS.ARTICLEPURCHASE_RECORD_TABLE_ID);
         let queryRecord = new wx.BaaS.Query();
@@ -52,7 +58,8 @@ Page({
               success(res) {
                 if (res.confirm) {
                   let params = {}
-                  params.totalCost = 0.01
+
+                  params.totalCost = 0.01;//文章单价，正式上线记得改回来
                   params.merchandiseDescription = `文章${richTextID}`
                   params.merchandiseSchemaID = config.BAAS.CONTENT_TABLE_ID
                   params.merchandiseRecordID = objects.id
@@ -61,6 +68,7 @@ Page({
                     if (res.errMsg == "requestPayment:ok") {
                       let transaction_no = res.transaction_no;
                       wx.BaaS.getContent({ richTextID: richTextID }).then(res => {
+                        self.setData({ title: res.data.title })
                         let data = {
                           richTextID: richTextID,
                           transaction_no: transaction_no,
@@ -95,5 +103,18 @@ Page({
         details_utils.render(self, richTextID)
       }
     }).catch(err => console.log(err))
+  },
+  shareImage() {
+    let self = this;
+    let title = '';
+    let articleList = wx.getStorageSync('articles');
+    for (let item of articleList) {
+      if (item.id == this.data.richTextID) {
+        title = item.title
+      }
+    }
+    wx.navigateTo({
+      url: '../shareImage/shareImage?richTextID=' + self.data.richTextID + '&title=' + title,
+    })
   }
 })
