@@ -93,7 +93,7 @@ Page({
       .then(res => {
         console.log(res)
         utils.updateUser({
-         memberID: this.data.memberID,
+          memberID: this.data.memberID,
           level: 1,
           expireDate: newExpireDate
         }, this)
@@ -115,15 +115,17 @@ function getMembership(ctx) {
     switch (membership.level) {
       case 0:
         memberDesc = '普通用户非包月用户';
-        break
+        break;
       case 1:
         memberDesc = '您的vip有效期至' + util.formatTime(new Date(membership.expireDate))
-        break
-      default: break;
+        break;
+      default:
+        memberDesc = '管理员';
+        break;
     }
     ctx.setData({
       profile: wx.BaaS.storage.get('userinfo'),
-      memberID:membership.id,
+      memberID: membership.id,
       memberDesc: memberDesc,
       memberExpireDate: membership.expireDate,
       memberLevel: membership.level

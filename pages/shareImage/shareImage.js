@@ -26,7 +26,7 @@ Page({
   },
   saveImage() {
     wx.canvasToTempFilePath({
-      fileType:'jpg',
+      fileType: 'jpg',
       quality: 1,
       canvasId: 'myCanvas',
       success: function (res) {
@@ -61,7 +61,8 @@ function drawShareImage(title, price, qrCodeUrl, avatarUrl) {
   const ctx = wx.createCanvasContext('myCanvas');
   let { windowWidth } = wx.getSystemInfoSync();
   let radio = windowWidth / 750;
-
+  ctx.setFillStyle('white')
+  ctx.fillRect(0, 0, windowWidth, windowWidth)
   //画头像
   ctx.drawImage(avatarUrl, windowWidth / 2 - 40, 10, 80, 80);
   //把头像画成圆形

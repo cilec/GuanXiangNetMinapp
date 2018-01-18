@@ -1,4 +1,5 @@
 <!--pages/test/test.wxml-->
 
 <button bindtap='share'>share</button>
+<button bindtap='upfile'>上传文件</button>
 <canvas style="width: 750rpx; height: 750rpx;" canvas-id="myCanvas"></canvas>
