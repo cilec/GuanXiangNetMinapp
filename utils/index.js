@@ -40,9 +40,7 @@ let updateUser = (params) => {
 
 }
 function getTodayNewArticleList({ category_id, currentPage }) {
-  // let testDate=new Date(2017,12,19,0);
   const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-  // let category_id = 1513696986609306;
   let objects = { category_id }
   let articleList = []
   wx.BaaS.getContentList(objects).

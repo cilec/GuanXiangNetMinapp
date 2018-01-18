@@ -1,7 +1,7 @@
 <!--pages/DayRecommended/DayRecommended.wxml-->
-
+<view class='topDate'>————{{date}}————</view>
 <navigator wx:for="{{articles}}" wx:key="{{id}}" class='news-pic' url='../details/details?id={{item.id}}'>
   <image mode='aspectFill' src='{{item.cover}}'></image>
   <text class='title'>{{item.title}}</text>
-  <text class='desc'>{{item.description}}</text>
+ <text class='desc' >{{item.date}}1.18 |</text> <text class='desc' style='left:80rpx'>{{item.description}}</text>
 </navigator>

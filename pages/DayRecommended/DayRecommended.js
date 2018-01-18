@@ -1,5 +1,6 @@
 // pages/DayRecommended/DayRecommended.js
 const { utils } = require('../../utils/index.js')
+const { formatTime, formatTimeToLocalDate } = require('../../utils/util.js')
 const app = getApp();
 Page({
 
@@ -9,7 +10,8 @@ Page({
   data: {
     userInfo: null,
     isLogin: false,
-    isFirstCommit: true
+    isFirstCommit: true,
+    date: ''
   },
 
   /**
@@ -18,10 +20,19 @@ Page({
   onLoad: function (options) {
     // wx.showNavigationBarLoading()
 
-
+    let date = new Date();
+    date = formatTimeToLocalDate(date);
+    this.setData({ date })
     this.getUserInfo()
     const category_id = 1513696986609306;
     utils.getTodayNewArticleList({ category_id, currentPage: this })
+    let articles = this.data.articles.map(item => {
+      item.created_at = formatTimeToLocalDate(item.created_at)
+      return item
+    })
+    this.setData({
+      articles
+    })
   },
   getUserInfo() {
     setTimeout(() => {
@@ -43,35 +54,5 @@ Page({
         })
       })
     }, 300)
-    // setTimeout(() => {
-    //   let { isFirstCommit, recordID } = this.data
-    //   utils.getUserProfile(this, (res) => {
-    //     if (res.data.meta.total_count != 0) {
-    //       this.setData({
-    //         isLogin: true,
-    //         isFirstCommit: false,
-    //         recordID: res.data.objects[0].id
-    //       })
-    //     } else {
-    //       let data = {
-    //         is_member: false,
-    //         isProfileComplete: true,
-    //         isFirstCommit: false,
-    //       }
-    //       utils.addUser(data, this)
-    //         .then(res => {
-    //           this.setData({
-    //             isLogin: true,
-    //             isFirstCommit: false,
-    //           })
-    //           // wx.hideNavigationBarLoading()
-    //           console.log(res)
-    //         }).catch(err => console.log(err))
-    //     }
-    //   })
-    // }, 300)
-
   }
-
-
 })

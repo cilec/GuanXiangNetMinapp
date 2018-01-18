@@ -6,6 +6,7 @@
   height: 50vh;
   width: 100%;
   position: relative;
+  margin: 10rpx 0;
 }
 
 .news-pic image {
@@ -46,4 +47,8 @@
   padding-left: 30rpx;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.topDate{
+  font-size: 0.8rem;
+  text-align: center;
 }
