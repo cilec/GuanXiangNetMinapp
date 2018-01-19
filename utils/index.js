@@ -1,4 +1,5 @@
 const { config } = require('../config/config.js')
+const { formatTimeToLocalDate } = require('./util.js')
 let getUserProfile = (ctx, cb) => {
   let tableId = config.BAAS.MEMBERPROFILE_TABLE_ID,
     Users = new wx.BaaS.TableObject(tableId),
@@ -43,10 +44,12 @@ function getTodayNewArticleList({ category_id, currentPage }) {
   const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
   let objects = { category_id }
   let articleList = []
-  wx.BaaS.getContentList(objects).
+   let contentList = new wx.BaaS.TableObject(tableID)
+  wx.BaaS.getContentList(objects).orderBy('-created_at').
     then((res) => {
       for (let item of res.data.objects) {
         if (item.created_at * 1000 > start) {
+          item.created_at = formatTimeToLocalDate(item.created_at)
           articleList = [item, ...articleList]
         }
       }
@@ -55,7 +58,7 @@ function getTodayNewArticleList({ category_id, currentPage }) {
         key: 'articles',
         data: articleList,
       })
-    }).catch(err => console.log(err))
+    })
 }
 
 function isExpireOut(uid) {

@@ -26,13 +26,6 @@ Page({
     this.getUserInfo()
     const category_id = 1513696986609306;
     utils.getTodayNewArticleList({ category_id, currentPage: this })
-    let articles = this.data.articles.map(item => {
-      item.created_at = formatTimeToLocalDate(item.created_at)
-      return item
-    })
-    this.setData({
-      articles
-    })
   },
   getUserInfo() {
     setTimeout(() => {

@@ -11,7 +11,7 @@ App({
   onLaunch: function () {
     let that = this
     // 引入 BaaS SDK
-    require('./utils/sdk-v1.1.1')
+    require('./utils/sdk-v1.1.4')
     const clientID = config.BAAS.CLIENT_ID
     wx.BaaS.init(clientID)
     let uid = this.getUserID()
