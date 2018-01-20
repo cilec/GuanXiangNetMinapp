@@ -4,19 +4,43 @@
     <view wx:if="{{ profile.avatarUrl }}" class="index-profile__img" style="background-image: url('{{profile.avatarUrl}}')"></view>
     <view wx:else class="index-profile__img-hold">暂无头像</view>
   </view>
-  <view class="index-title">
+  <view class="index-title" >
     {{ title }}
   </view>
   <view class="index-books">
-    <view class="index-books__input">
+    <view class="index-books__input" style='text-align:center'>
       <text>{{memberDesc}}</text>
     </view>
-    <block wx:for="{{price}}" wx:key="id">
-      <view class="index-books__controls">
-        <button class="index-books__controls--create" data-name="{{item.name}}" data-id="{{item.id}}" data-price="{{item.price}}" data-durationType="{{item.durationType}}" bindtap="payOrder" type="primary">
-          {{item.name}}:{{item.price}}元
-        </button>
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
       </view>
-    </block>
+      <view class="weui-tab__panel">
+        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+          <block wx:for="{{price}}" wx:key="id">
+            <view class="index-books__controls">
+              <button class="index-books__controls--create" data-name="{{item.name}}" data-id="{{item.id}}" data-price="{{item.price}}" data-durationType="{{item.durationType}}" bindtap="payOrder" type="primary">
+                {{item.name}}:{{item.price}}元
+              </button>
+            </view>
+          </block>
+        </view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+          <scroll-view class="weui-cells weui-cells_after-title">
+            <block wx:for="{{record}}" wx:key="content_id">
+              <navigator url="/pages/details/details?id={{item.content_id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">{{item.title}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">{{item.created_at}}</view>
+              </navigator>
+            </block>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

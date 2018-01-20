@@ -1,5 +1,7 @@
 /* pages/user/user.wxss */
+
 /**index.wxss**/
+
 .index {
   width: 100%;
   height: 100%;
@@ -35,16 +37,17 @@
   font-size: 60rpx;
   font-weight: 800;
   text-align: center;
+  padding-left: 30rpx;
 }
 
 .index-books {
-  width: 80%;
+  width: 100%;
   margin: 50rpx auto;
   overflow: hidden;
 }
 
 .index-books__input {
-   width: 100%;
+  width: 100%;
 }
 
 .index-books__input input {
@@ -68,13 +71,11 @@
   margin: 20rpx 0;
 }
 
-.index-books__controls--show,
-.index-books__controls--edit-area {
+.index-books__controls--show, .index-books__controls--edit-area {
   flex-basis: 40%;
 }
 
-.index-books__controls--show,
-.index-books__controls--edit-area > input {
+.index-books__controls--show, .index-books__controls--edit-area > input {
   height: 60rpx;
   line-height: 60rpx;
   border: 1rpx solid transparent;
@@ -83,7 +84,7 @@
 
 .index-books__controls--edit-area > input {
   border: 1rpx solid #eee;
-  padding: 4rpx 10rpx;  /*hack 上下 4rpx 为了解决 input 显示时文字的移动*/
+  padding: 4rpx 10rpx; /*hack 上下 4rpx 为了解决 input 显示时文字的移动*/
 }
 
 .index-books__controls--create {
@@ -93,4 +94,8 @@
 .btn {
   font-size: 20rpx;
   margin: 0 10rpx;
+}
+
+.weui-tab__content {
+  text-align: center;
 }

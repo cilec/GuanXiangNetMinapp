@@ -1,4 +1,6 @@
 // pages/user/user.js
+
+var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
 const { utils } = require('../../utils/index.js')
 const util = require('../../utils/util.js')
 const { config } = require('../../config/config.js')
@@ -10,7 +12,11 @@ Page({
    */
   data: {
     profile: {},
-    price: []
+    price: [],
+    tabs: ["充值", "我的收藏"],
+    activeIndex: 0,
+    sliderOffset: 0,
+    sliderLeft: 0
   },
 
   /**
@@ -50,7 +56,49 @@ Page({
         }
       }
     })
-
+    //设置标签栏
+    var that = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
+          sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
+        });
+      }
+    });
+    this.getFavorites();
+  },
+  //标签栏点击事件
+  tabClick: function (e) {
+    this.setData({
+      sliderOffset: e.currentTarget.offsetLeft,
+      activeIndex: e.currentTarget.id
+    });
+  },
+  getFavorites() {
+    let self = this;
+    var query = new wx.BaaS.Query()
+    var Favorite = new wx.BaaS.TableObject(config.BAAS.FAVORITE_TABLE_ID)
+    query.compare('created_by', '=', parseInt(app.getUserID()));
+    Favorite.setQuery(query).find().then(res => {
+      let arr = res.data.objects[0].favorite_articles.reverse()
+      let query = new wx.BaaS.Query()
+      let contentGroupID = 1513696717083142
+      let MyContentGroup = new wx.BaaS.ContentGroup(contentGroupID)
+      query.in('id', arr)
+      return MyContentGroup.setQuery(query).find()
+    }).then(res => {
+      let recordList = res.data.objects.map(item => {
+        console.log(item)
+        item.created_at = util.formatTimeToLocalDate(new Date(item.created_at * 1000))
+        return {
+          content_id: item.id,
+          created_at: item.created_at,
+          title: item.title
+        }
+      })
+      self.setData({ record: recordList })
+    }).catch(err => console.log(err))
   },
   payOrder(e) {
 
