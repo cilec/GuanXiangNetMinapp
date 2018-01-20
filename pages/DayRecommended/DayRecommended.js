@@ -25,7 +25,11 @@ Page({
     this.setData({ date })
     this.getUserInfo()
     const category_id = 1513696986609306;
-    utils.getTodayNewArticleList({ category_id, currentPage: this })
+    utils.getRecommands({ currentPage: this })
+  },
+  onReachBottom: function () {
+    let pageIndex = this.data.pageIndex;
+    utils.getRecommands({ currentPage: this, pageIndex })
   },
   getUserInfo() {
     setTimeout(() => {

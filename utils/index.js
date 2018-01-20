@@ -40,26 +40,53 @@ let updateUser = (params) => {
   return User.update()
 
 }
-function getTodayNewArticleList({ category_id, currentPage }) {
-  const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-  let objects = { category_id }
-  let articleList = []
-   let contentList = new wx.BaaS.TableObject(tableID)
-  wx.BaaS.getContentList(objects).orderBy('-created_at').
-    then((res) => {
+//获取推荐文章
+function getRecommands({ currentPage, pageIndex }) {
+  let articleList = currentPage.data.articles ? currentPage.data.articles : [];
+  pageIndex = !pageIndex ? 0 : pageIndex;
+  let footballContentGroupID = 1513696717083142
+  let FootballContentGroup = new wx.BaaS.ContentGroup(footballContentGroupID)
+  let query = new wx.BaaS.Query()
+  query.arrayContains('categories', [1513696986609306])
+  FootballContentGroup.setQuery(query).orderBy('-created_at').limit(5).offset(pageIndex * 5)
+    .find().then(res => {
+      console.log(res)
       for (let item of res.data.objects) {
-        if (item.created_at * 1000 > start) {
-          item.created_at = formatTimeToLocalDate(item.created_at)
-          articleList = [item, ...articleList]
-        }
+        item.created_at = formatTimeToLocalDate(new Date(item.created_at * 1000))
+        articleList = [...articleList, item]
       }
-      currentPage.setData({ articles: articleList })
+      currentPage.setData({
+        articles: articleList,
+        pageIndex: pageIndex+1
+      })
+      //把文章存到本地
       wx.setStorage({
         key: 'articles',
         data: articleList,
       })
-    })
+    }).catch(err => console.log(err))
 }
+// function getTodayNewArticleList({ category_id, currentPage }) {
+//   //今天的日期
+//   const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+//   let objects = { category_id }
+//   let articleList = []
+//   //  let contentList = new wx.BaaS.TableObject(tableID)
+//   wx.BaaS.getContentList(objects).orderBy('-created_at').
+//     then((res) => {
+//       for (let item of res.data.objects) {
+//         if (item.created_at * 1000 > start) {
+//           item.created_at = formatTimeToLocalDate(item.created_at)
+//           articleList = [item, ...articleList]
+//         }
+//       }
+//       currentPage.setData({ articles: articleList })
+//       wx.setStorage({
+//         key: 'articles',
+//         data: articleList,
+//       })
+//     })
+// }
 
 function isExpireOut(uid) {
   let query = new wx.BaaS.Query()
@@ -81,5 +108,5 @@ module.exports.utils = {
   getUserProfile,
   addUser,
   updateUser,
-  getTodayNewArticleList
+  getRecommands
 }
