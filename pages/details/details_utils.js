@@ -1,5 +1,6 @@
 const { config } = require('../../config/config.js')
 const wxParser = require('../../wxParser/index');
+const app=getApp()
 module.exports.details_utils = {
   render, addPurchaseRecord
 }

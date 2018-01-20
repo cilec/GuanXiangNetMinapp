@@ -1,4 +1,47 @@
 /* pages/details/details.wxss */
-page{
+
+page {
   font-size: 14px;
+}
+
+.favorite,.cancel-favorite {
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  position: absolute;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 16px;
+  box-sizing: border-box;
+  text-decoration: none;
+  text-align: center;
+  color: #fff;
+  background-color: #4b0;
+  border-radius: 0;
+  margin-bottom: 0;
+  border: none;
+  line-height: 50px;
+  height: 50px;
+}
+
+.favorite::after,cancel-favorite::after {
+  display: none;
+  content: " ";
+  width: 200%;
+  height: 200%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.cancel-favorite{
+  background-color: rgb(255, 68, 68);
 }

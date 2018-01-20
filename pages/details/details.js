@@ -3,7 +3,10 @@ const wxParser = require('../../wxParser/index');
 const { config } = require('../../config/config.js')
 const { details_utils } = require('details_utils.js');
 Page({
-  data: { membership: {} },
+  data: {
+    membership: {},
+    hasFavorite: false
+  },
   onLoad: function (objects) {
     console.log('details', objects)
     wx.authorize({
@@ -16,7 +19,7 @@ Page({
             showCancel: false,
             confirmText: '好的',
             confirmColor: '#FD544A',
-            success() {
+            complete() {
               wx.reLaunch({
                 url: "../DayRecommended/DayRecommended",
               })
@@ -27,7 +30,7 @@ Page({
     })
     let richTextID = objects.id;
     let self = this
-
+    this.checkFavorite(richTextID)
 
     //获取用户类别判断是否包时长用户
     let uid = parseInt(app.getUserID())
@@ -116,5 +119,66 @@ Page({
     wx.navigateTo({
       url: '../shareImage/shareImage?richTextID=' + self.data.richTextID + '&title=' + title,
     })
+  },
+  favorite() {
+    let self = this;
+    let { hasFavorite, richTextID } = this.data;
+    richTextID = parseInt(richTextID)
+    let query = new wx.BaaS.Query()
+    let Favorite = new wx.BaaS.TableObject(config.BAAS.FAVORITE_TABLE_ID)
+    query.compare('created_by', '=', parseInt(app.getUserID()))
+
+    if (hasFavorite) {
+      let favorite = Favorite.getWithoutData(self.data.favoritesID)
+      favorite.remove('favorite_articles', richTextID).update().then(res => {
+        handleResult(self, res)
+      })
+    } else {
+      Favorite.setQuery(query).find().then((res) => {
+        //用户还未收藏过任何文章
+        if (res.data.objects.length == 0) {
+          let record = { favorite_articles: [richTextID] }
+          let newFavorite = new wx.BaaS.TableObject(config.BAAS.FAVORITE_TABLE_ID).create()
+          newFavorite.set(record).save().then(res => {
+            handleResult(self, res)
+          })
+        } else {  //用户已添加过文章
+          let favorite = new wx.BaaS.TableObject(config.BAAS.FAVORITE_TABLE_ID).getWithoutData(res.data.objects[0].id)
+          // let record = [richTextID, ...res.data.objects[0].favorite_articles]
+          favorite.append('favorite_articles', richTextID).update().then(res => {
+            handleResult(self, res)
+          })
+        }
+      })
+    }
+
+
+  },
+  checkFavorite(richTextID) {
+    let self = this;
+    let { hasFavorite } = this.data;
+    richTextID = parseInt(richTextID)
+    let query = new wx.BaaS.Query()
+    let Favorite = new wx.BaaS.TableObject(config.BAAS.FAVORITE_TABLE_ID)
+    query.compare('created_by', '=', parseInt(app.getUserID()))
+    query.in('favorite_articles', [richTextID])
+    Favorite.setQuery(query).find().then(res => {
+      if (res.data.objects.length != 0) {
+        wx.setStorageSync('favorites', res.data.objects[0].favorite_articles)
+        console.log('favorites', res)
+        self.setData({
+          hasFavorite: true,
+          favoritesID: res.data.objects[0].id
+        })
+      }
+    }).catch(err => console.log(err))
   }
 })
+function handleResult(currentpage, res) {
+  currentpage.setData({
+    hasFavorite: !currentpage.data.hasFavorite,
+    favoritesID: res.data.id
+  })
+  wx.setStorageSync('favorites', res.data.favorite_articles)
+  console.log(res)
+}

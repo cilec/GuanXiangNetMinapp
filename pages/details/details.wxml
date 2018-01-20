@@ -4,3 +4,5 @@
   <template is="wxParser" data="{{wxParserData:richText.nodes}}" />
 </view>
 <button type='primary' bindtap="shareImage" plain wx:if="{{membership.level==2}}">生成分享图片</button>
+<view wx:if="{{hasFavorite}}" class='cancel-favorite' bindtap='favorite'>取消收藏</view>
+<view wx:else class='favorite' bindtap='favorite'>收藏该文</view>

@@ -18,20 +18,5 @@
         </button>
       </view>
     </block>
-    <!-- <view class="index-books__controls">
-      <button class="index-books__controls--create" bindtap="createBook" type="primary">
-        充值季度：300元
-      </button>
-    </view>
-    <view class="index-books__controls">
-      <button class="index-books__controls--create" bindtap="createBook" type="primary">
-        充值半年：600元
-      </button>
-    </view>
-    <view class="index-books__controls">
-      <button class="index-books__controls--create" bindtap="createBook" type="primary">
-        充值一年：1200元
-      </button>
-    </view> -->
   </view>
 </view>
