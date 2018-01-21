@@ -21,6 +21,7 @@ function render(ctx, richTextId) {
         // });
       }
     });
+    wx.hideLoading()
   }).catch(err => console.log(err))
 }
 

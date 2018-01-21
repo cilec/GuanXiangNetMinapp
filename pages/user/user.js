@@ -75,6 +75,11 @@ Page({
       activeIndex: e.currentTarget.id
     });
   },
+  onPullDownRefresh() {
+    this.getFavorites()
+    getPriceList(this)
+    wx.stopPullDownRefresh()
+  },
   getFavorites() {
     let self = this;
     var query = new wx.BaaS.Query()
@@ -150,6 +155,10 @@ Page({
       }).catch(err => console.log(err))
   }
 })
+
+
+
+//获得会员信息
 function getMembership(ctx) {
   let uid = parseInt(app.getUserID())
   let query = new wx.BaaS.Query()
@@ -180,6 +189,9 @@ function getMembership(ctx) {
     })
   }).catch(err => console.log(err))
 }
+
+
+//获得包时长价格表
 function getPriceList(ctx) {
   let query = new wx.BaaS.Query();
   query.exists('durationType')
