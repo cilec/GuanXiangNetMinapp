@@ -1,5 +1,5 @@
 <!--pages/test/test.wxml-->
-
-<button bindtap='share'>share</button>
-<button bindtap='upfile'>上传文件</button>
-<canvas style="width: 750rpx; height: 750rpx;" canvas-id="myCanvas"></canvas>
+<import src="../../wxParser/index.wxml" />
+<view class="wxParser">
+  <template is="wxParser" data="{{wxParserData:richText.nodes}}" />
+</view>
